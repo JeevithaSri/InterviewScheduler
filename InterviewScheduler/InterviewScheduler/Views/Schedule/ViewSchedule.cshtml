@@ -1,0 +1,211 @@
+﻿@model IEnumerable<CandidateAPI.InterviewSchedulerModel.Schedule>
+
+@{
+    ViewData["Title"] = "ViewSchedule";
+}
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        @@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+        .subscription {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 80%;
+            margin-left: 50px;
+            margin-right: 50px;
+            counter-reset: serial-number; /* Set the serial number counter to 0 */
+        }
+
+            .subscription td:first-child:before {
+                counter-increment: serial-number; /* Increment the serial number counter */
+                content: counter(serial-number); /* Display the counter */
+            }
+
+
+            .subscription td, .subscription th {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            .subscription tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            .subscription tr:hover {
+                background-color: #ddd;
+            }
+
+            .subscription th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: left;
+                background-color: #01054d;
+                color: white;
+            }
+
+        .wrapper {
+            display: inline-flex;
+        }
+
+            .wrapper .icon {
+                position: relative;
+                background-color: #ffffff;
+                border-radius: 50%;
+                border: 1px solid #adc4bf;
+                padding: 15px;
+                margin: 10px;
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            }
+
+            .wrapper .tooltip {
+                position: absolute;
+                top: 0;
+                font-size: 14px;
+                background-color: #ffffff;
+                color: #ffffff;
+                padding: 5px 8px;
+                border-radius: 5px;
+                box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+                opacity: 0;
+                pointer-events: none;
+                transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            }
+
+                .wrapper .tooltip::before {
+                    position: absolute;
+                    content: "";
+                    height: 8px;
+                    width: 8px;
+                    background-color: #ffffff;
+                    bottom: -3px;
+                    left: 50%;
+                    transform: translate(-50%) rotate(45deg);
+                    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                }
+
+            .wrapper .icon:hover .tooltip {
+                top: -45px;
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+            }
+
+            .wrapper .icon:hover span,
+            .wrapper .icon:hover .tooltip {
+                text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
+            }
+
+            .wrapper .edit:hover,
+            .wrapper .edit:hover .tooltip,
+            .wrapper .edit:hover .tooltip::before {
+                background-color: #3b5999;
+                color: #ffffff;
+            }
+
+            .wrapper .delete:hover,
+            .wrapper .delete:hover .tooltip,
+            .wrapper .delete:hover .tooltip::before {
+                background-color: #de463b;
+                color: #ffffff;
+            }
+    </style>
+</head>
+<div class="justify-content-xl-center" align="center">
+
+    <h1>View Schedule</h1>
+
+    <br />
+    <table class="subscription">
+        <thead>
+            <tr>
+                <th>
+                    <label>Sl.No</label>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CandidateId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PanelId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LevelId)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TimeFrom)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TimeTo)
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CandidateId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PanelId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LevelId)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeFrom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeTo)
+                </td>
+                <td>
+                    <div class="wrapper">
+                        <div class="icon edit">
+                            <div class="tooltip">Update</div>
+                            <a asp-action="UpdateSchedule" asp-route-id="@item.Id"><span><i class="fa fa-edit" style="color: black;"></i></span></a>
+                        </div>
+                    </div>
+                    <div class="wrapper">
+                        <div class="icon delete">
+                            <div class="tooltip">Delete</div>
+                            <a asp-action="DeleteSchedule" asp-route-id="@item.Id"><span><i class="fa fa-trash" style="color: black;"></i></span></a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <br />
+    <br />
+
+
+
+    <div class="justify-content-xl-center">
+        <a class="btn btn-info" asp-action="AddSchedule">Add Schedule</a>
+    </div>
+
+</div>
