@@ -1,0 +1,75 @@
+﻿@model CandidateAPI.InterviewSchedulerModel.InterviewStatus
+
+@{
+    ViewData["Title"] = "UpdateInterviewStatus";
+}
+
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="~/css/Create.css" />
+
+</head>
+<body>
+    @*<section class="get-in-touch">*@
+
+        <center>
+            <div class="container" style="color:green">
+                <h2 class="title">UPDATE INTERVIEW STATUS</h2>
+            </div>
+        </center>
+        
+
+        <div class="container">
+
+            <form asp-action="UpdateInterviewStatus" class="form-horizontal">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group has-success">
+                    <label asp-for="ScheduleId" class="control-label col-sm-2"></label>
+
+                    <div class="col-sm-8" asp-for="ScheduleId">
+                        @Html.DropDownListFor(model => model.ScheduleId, new SelectList(ViewBag.specializationSchedule, "Value", "Text"), "--- Select ---")
+
+                        <span asp-validation-for="ScheduleId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group has-success">
+                    <label asp-for="Status" class="control-label col-sm-2"></label>
+                    <div class="form-group has-success">
+
+                        <input asp-for="Status" class="form-control" />
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <center>
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group has-success">
+                                <input class="btn btn-success" type="submit" value="Submit" />
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-6">
+                            <div class="form-group has-success">
+                                <a asp-action="ViewInterviewStatus" class="btn btn-dark" style="color:white">Back</a>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </center>
+            </form>
+        </div>
+    @*</section>*@
+</body>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

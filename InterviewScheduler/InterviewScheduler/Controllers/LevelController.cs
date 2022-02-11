@@ -8,35 +8,26 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using X.PagedList;
+using X.PagedList.Mvc.Core;
+
 
 namespace InterviewScheduler.Controllers
 {
     public class LevelController : Controller
     {
-        string Baseurl = "https://localhost:44308/";
 
-        public async Task<ActionResult> ViewLevel(InterviewLevel d)
+        public async Task<ActionResult> ViewLevel(InterviewLevel d, int? page)
         {
             List<InterviewLevel> level = new List<InterviewLevel>();
 
-            using (var client = new HttpClient())
+            HttpResponseMessage res = await Constant.Constant.GetCall(Constant.Constant.GetAllLevelsUrl );
+            if (res.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri(Baseurl);
-
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpResponseMessage Res = await client.GetAsync("api/Job/GetAllInterviewLevels");
-
-                if (Res.IsSuccessStatusCode)
-                {
-                    var SubsResponse = Res.Content.ReadAsStringAsync().Result;
-
-                    level = JsonConvert.DeserializeObject<List<InterviewLevel>>(SubsResponse);
-
-                }
-                return View(level);
+                var SubsResponse = res.Content.ReadAsStringAsync().Result;
+                level = JsonConvert.DeserializeObject<List<InterviewLevel>>(SubsResponse);
             }
+            return View(level.ToPagedList(page ?? 1, 5));
         }
 
 
@@ -53,15 +44,11 @@ namespace InterviewScheduler.Controllers
         public async Task<ActionResult> AddLevel(InterviewLevel d)
         {
             InterviewLevel level = new InterviewLevel();
-            using (var httpClient = new HttpClient())
+            StringContent content = new StringContent(JsonConvert.SerializeObject(d), Encoding.UTF8, "application/json");
+            HttpResponseMessage res = await Constant.Constant.PostCall(Constant.Constant.AddLevelUrl , content);
+            if (res.IsSuccessStatusCode)
             {
-                StringContent content = new StringContent(JsonConvert.SerializeObject(d), Encoding.UTF8, "application/json");
-
-                using (var response = await httpClient.PostAsync("https://localhost:44308/api/Job/AddInterviewLevel", content))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    level = JsonConvert.DeserializeObject<InterviewLevel>(apiResponse);
-                }
+                string apiResponse = await res.Content.ReadAsStringAsync();
             }
             return RedirectToAction("ViewLevel");
         }
@@ -70,34 +57,24 @@ namespace InterviewScheduler.Controllers
         public async Task<ActionResult> UpdateLevel(int id)
         {
             InterviewLevel level = new InterviewLevel();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("https://localhost:44308/api/Job/UpdateInterviewLevel" + id))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    level = JsonConvert.DeserializeObject<InterviewLevel>(apiResponse);
-                }
-            }
+            HttpResponseMessage response = await Constant.Constant.GetCall(Constant.Constant.UpdateLevelViewUrl  + id);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            level = JsonConvert.DeserializeObject<InterviewLevel>(apiResponse);
             return View(level);
         }
 
         [HttpPost]
         public async Task<ActionResult> UpdateLevel(InterviewLevel l)
         {
-            InterviewLevel level = new InterviewLevel();
 
-            using (var httpClient = new HttpClient())
-            {
-                #region
-                #endregion
-                int id = l.Id;
-                StringContent content1 = new StringContent(JsonConvert.SerializeObject(l), Encoding.UTF8, "application/json");
-                using (var response = await httpClient.PutAsync("https://localhost:44308/api/Job/UpdateInterviewLevel?id=" + id, content1))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    ViewBag.Result = "Success";
-                }
-            }
+            int id = l.Id;
+
+            StringContent content = new StringContent(JsonConvert.SerializeObject(l), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await Constant.Constant.PutCall(Constant.Constant.UpdateLevelUrl  + id, content);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            ViewBag.Result = "Success";
+
             return RedirectToAction("ViewLevel");
         }
 
@@ -106,14 +83,10 @@ namespace InterviewScheduler.Controllers
         {
             TempData["id"] = id;
             InterviewLevel level = new InterviewLevel();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("https://localhost:44308/api/Job/DeleteInterviewLevel" + id))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    level = JsonConvert.DeserializeObject<InterviewLevel>(apiResponse);
-                }
-            }
+          
+            HttpResponseMessage response = await Constant.Constant.GetCall(Constant.Constant.DeleteLevelViewUrl  + id);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            level = JsonConvert.DeserializeObject<InterviewLevel>(apiResponse);
             return View(level);
         }
 
@@ -122,13 +95,9 @@ namespace InterviewScheduler.Controllers
         public async Task<ActionResult> DeleteLevel(InterviewLevel d)
         {
             int id = Convert.ToInt32(TempData["id"]);
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.DeleteAsync("https://localhost:44308/api/Job/DeleteInterviewLevel?id=" + id))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                }
-            }
+            HttpResponseMessage response = await Constant.Constant.DeleteCall(Constant.Constant.DeleteLevelUrl  + id);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            ViewBag.Result = "Success";
 
             return RedirectToAction("ViewInterviewLevel");
         }

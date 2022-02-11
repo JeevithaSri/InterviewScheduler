@@ -5,90 +5,8 @@
 }*@
 
 <head>
-    <style>
-        .content-box {
-            background-color: #fafafb;
-            box-shadow: 1px 4px 8px rgba(0,0,0,.15);
-            transition: all .3s ease-in-out;
-            padding: 10px;
-            padding-bottom: 0;
-            margin-top: 40px;
-            margin-bottom: 10px;
-            height: 300px;
-        }
+    <link rel="stylesheet" href="~/css/Delete.css" />
 
-            .content-box .finbyz-icon {
-                height: 100px;
-                width: 100px;
-                display: inline;
-            }
-
-        .noselect {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        button {
-            width: 150px;
-            height: 50px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            background: red;
-            border: none;
-            border-radius: 5px;
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
-            background: #e62222;
-        }
-
-            button, button span {
-                transition: 200ms;
-            }
-
-                button .text {
-                    transform: translateX(35px);
-                    color: white;
-                    font-weight: bold;
-                }
-
-                button .icon {
-                    position: absolute;
-                    border-left: 1px solid #c41b1b;
-                    transform: translateX(110px);
-                    height: 40px;
-                    width: 40px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-
-                button svg {
-                    width: 15px;
-                    fill: #eee;
-                }
-
-                button:hover {
-                    background: #ff3636;
-                }
-
-                    button:hover .text {
-                        color: transparent;
-                    }
-
-                    button:hover .icon {
-                        width: 150px;
-                        border-left: none;
-                        transform: translateX(0);
-                    }
-
-                button:focus {
-                    outline: none;
-                }
-    </style>
 </head>
 
 
@@ -114,11 +32,12 @@
                                     <h5>
                                         @Html.DisplayNameFor(model => model.Mobileno)
                                     </h5>
+
                                     <h5>
-                                        @Html.DisplayNameFor(model => model.Level)
+                                        @Html.DisplayNameFor(model => model.JobId)
                                     </h5>
                                     <h5>
-                                        @Html.DisplayNameFor(model => model.JobRole)
+                                        @Html.DisplayNameFor(model => model.LevelId)
                                     </h5>
                                 </th>
                                 <td>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -132,11 +51,12 @@
                                     <h5>
                                         @Html.DisplayFor(model => model.Mobileno)
                                     </h5>
+
                                     <h5>
-                                        @Html.DisplayFor(model => model.Level)
+                                        @Html.DisplayFor(model => model.JobId)
                                     </h5>
                                     <h5>
-                                        @Html.DisplayFor(model => model.JobRole)
+                                        @Html.DisplayFor(model => model.LevelId)
                                     </h5>
                                 </td>
                             </tr>

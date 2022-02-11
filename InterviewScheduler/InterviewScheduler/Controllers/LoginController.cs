@@ -15,8 +15,7 @@ namespace InterviewScheduler.Controllers
 {
     public class LoginController : Controller
     {
-       private readonly ISession session;
-        string Baseurl = "https://localhost:44308/";
+        private readonly ISession session;
 
 
 
@@ -41,11 +40,11 @@ namespace InterviewScheduler.Controllers
             {
                 StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
 
-                HttpResponseMessage Res = await client.PostAsync("https://localhost:44308/api/Users/AddUser", content);
-                
+                HttpResponseMessage Res = await client.PostAsync(Constant.Constant.AddUserUrl, content);
+
                 if (Res.IsSuccessStatusCode)
                 {
-                    
+
                     return RedirectToAction("Login", "Login");
 
                 }
@@ -69,52 +68,52 @@ namespace InterviewScheduler.Controllers
             {
                 StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
 
-                HttpResponseMessage Res = await client.PostAsync("https://localhost:44308/api/Users/LoginUser", content);
+                HttpResponseMessage Res = await client.PostAsync(Constant.Constant.LoginUserUrl, content);
 
-              
-                    if (Res.IsSuccessStatusCode)
+
+                if (Res.IsSuccessStatusCode)
+                {
+                    string apiResponse = await Res.Content.ReadAsStringAsync();
+                    userObj = JsonConvert.DeserializeObject<User>(apiResponse);
+
+
+                    if (userObj != null)
                     {
-                        string apiResponse = await Res.Content.ReadAsStringAsync();
-                        userObj = JsonConvert.DeserializeObject<User>(apiResponse);
 
-
-                        if (userObj != null)
+                        if (userObj.RoleId == 1)
                         {
-
-                            if (userObj.RoleId == 1)
-                            {
-                                return RedirectToAction("Index", "HrDashboard");
-                            }
-                            else if (userObj.RoleId == 2)
-                            {
-                                return RedirectToAction("Index", "RecruitorDashboard");
-                            }
-
+                            return RedirectToAction("Index", "HrDashboard");
                         }
+                        else if (userObj.RoleId == 2)
+                        {
+                            return RedirectToAction("Index", "RecruitorDashboard");
+                        }
+
                     }
+                }
 
-               
 
-                ViewBag.Message = string.Format("Your Username or Password is incorrect", Message);
+
+                //ViewBag.Message = string.Format("Your Username or Password is incorrect", Message);
                 return View(Message);
-               
 
-            }   
+
+            }
         }
 
 
-            public IActionResult Logout()
+        public IActionResult Logout()
         {
             return RedirectToAction("Login");
         }
 
         public async Task<bool> IsUserNameExist(string Username)
         {
-            
+
             Register validateName = new Register();
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync("https://localhost:44308/api/Users/Username/" + Username))
+                using (var response = await httpClient.GetAsync(Constant.Constant.UsernameUrl + Username))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     validateName = JsonConvert.DeserializeObject<Register>(apiResponse);
@@ -131,7 +130,70 @@ namespace InterviewScheduler.Controllers
             }
 
 
+
+
         }
 
+        public async Task<bool> UserNameDoesntExist(string Username)
+        {
+
+            User validateName = new User();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(Constant.Constant.UsernameUrl + Username))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    validateName = JsonConvert.DeserializeObject<User>(apiResponse);
+                }
+
+            }
+            if (validateName.Username != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> CheckPassword(string Password)
+        {
+
+            User validateName = new User();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(Constant.Constant.UserPasswordUrl + Password))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    validateName = JsonConvert.DeserializeObject<User>(apiResponse);
+                }
+
+            }
+            if (validateName.Password != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<ActionResult> NavUsername(int id)
+        {
+
+            User username = new User();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(Constant.Constant.UsernameUrl + id))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    username = JsonConvert.DeserializeObject<User>(apiResponse);
+                }
+
+            }
+            return View(username);
+        }
     }
 }

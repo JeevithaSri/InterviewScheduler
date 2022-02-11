@@ -19,9 +19,11 @@ namespace CandidateAPI.InterviewSchedulerModel
         public string Mobileno { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
-        public string JobRole { get; set; }
-        public string Level { get; set; }
+        public int? JobId { get; set; }
+        public int? LevelId { get; set; }
 
+        public virtual Job Job { get; set; }
+        public virtual InterviewLevel Level { get; set; }
         public virtual ICollection<PanelAvailability> PanelAvailabilities { get; set; }
         public virtual ICollection<Schedule> Schedules { get; set; }
     }

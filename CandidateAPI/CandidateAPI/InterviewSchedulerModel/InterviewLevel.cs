@@ -10,6 +10,7 @@ namespace CandidateAPI.InterviewSchedulerModel
         public InterviewLevel()
         {
             Candidates = new HashSet<Candidate>();
+            Panels = new HashSet<Panel>();
             Schedules = new HashSet<Schedule>();
         }
 
@@ -20,6 +21,7 @@ namespace CandidateAPI.InterviewSchedulerModel
         public string Description { get; set; }
 
         public virtual ICollection<Candidate> Candidates { get; set; }
+        public virtual ICollection<Panel> Panels { get; set; }
         public virtual ICollection<Schedule> Schedules { get; set; }
     }
 }

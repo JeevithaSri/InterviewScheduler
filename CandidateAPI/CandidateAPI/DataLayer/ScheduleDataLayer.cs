@@ -16,7 +16,11 @@ namespace CandidateAPI.DataLayer
 
         public List<Schedule> GetAllSchedules()
         {
-            return db.Schedules.ToList();
+            return db.Schedules.Include(t => t.Job)
+                            .Include(t => t.Level)
+                            .Include(t=>t.Candidate)
+                            .Include(t => t.Panel)
+                            .ToList();
         }
 
         public int AddSchedule(Schedule a)
@@ -51,7 +55,9 @@ namespace CandidateAPI.DataLayer
 
         public List<InterviewStatus> GetAllInterviewStatuses()
         {
-            return db.InterviewStatuses.ToList();
+            return db.InterviewStatuses.Include(t => t.Schedule)
+                            
+                                        .ToList();
         }
 
         public int AddInterviewStatus(InterviewStatus a)

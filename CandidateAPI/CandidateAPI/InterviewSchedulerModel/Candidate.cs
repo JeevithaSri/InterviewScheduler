@@ -24,7 +24,8 @@ namespace CandidateAPI.InterviewSchedulerModel
         public int JobId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
-        public byte[] Resume { get; set; }
+        public string Resume { get; set; }
+        public string Status { get; set; }
 
         public virtual Job Job { get; set; }
         public virtual InterviewLevel Level { get; set; }

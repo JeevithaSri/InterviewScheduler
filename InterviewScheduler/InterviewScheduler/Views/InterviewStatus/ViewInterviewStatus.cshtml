@@ -1,0 +1,103 @@
+﻿@model X.PagedList.IPagedList<CandidateAPI.InterviewSchedulerModel.InterviewStatus>
+
+@using X.PagedList.Mvc.Core;
+
+
+@{
+    ViewData["Title"] = "ViewInterviewStatus";
+}
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="~/css/View.css" />
+</head>
+
+<div class="justify-content-xl-center" align="center">
+
+    <h2 class="title">VIEW INTERVIEW STATUS</h2>
+
+    <br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <label>Sl.No</label>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().ScheduleId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().CreatedAt)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().ModifiedAt)
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ScheduleId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedAt)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ModifiedAt)
+                    </td>
+                    <td>
+                        <div class="wrapper">
+                            <div class="icon edit">
+                                <div class="tooltip">Update</div>
+                                <a asp-action="UpdateInterviewStatus" asp-route-id="@item.Id"><span><i class="fa fa-edit" style="color: black;"></i></span></a>
+                            </div>
+                        </div>
+                        <div class="wrapper">
+                            <div class="icon delete">
+                                <div class="tooltip">Delete</div>
+                                <a asp-action="DeleteInterviewStatus" asp-route-id="@item.Id"><span><i class="fa fa-trash" style="color: black;"></i></span></a>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="justify-content-xl-center">
+        <a class="btn btn-info" asp-action="AddInterviewStatus">Add Interview Status</a>
+    </div>
+    <br />
+
+    <center>
+        <div class="justify-content-xl-center">
+            <a asp-controller="HrDashboard" asp-action="Index" class="btn btn-outline-dark">Back</a>
+        </div>
+    </center>
+
+    <br />
+
+    @Html.PagedListPager(Model, page => Url.Action("ViewInterviewStatus", "InterviewStatus", new { page }))
+
+
+</div>

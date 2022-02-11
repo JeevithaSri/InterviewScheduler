@@ -68,21 +68,28 @@ namespace JobAPI.Controllers
 
             return db.GetJobById(id);
 
-            
-            //if (db == null)
-            //{
-            //    var message = string.Format("Product with id = {0} not found", id);
-            //    return Request.CreateErrorResponse(HttpStatusCode.NotFound, message);
-            //}
-            //else
-            //{
-            //    return Request.CreateResponse(HttpStatusCode.OK, db);
-            //}
-
-
-
         }
 
+        [HttpGet("Jobid/{Jobid}")]
+        public IActionResult GetJobIdById(string Jobid)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var job = db.GetJobIdByID(Jobid);
+
+
+            if (job == null)
+            {
+                return NotFound();
+            }
+
+
+            return Ok(job);
+        }
 
         [HttpGet("GetAllInterviewLevels")]
         public List<InterviewLevel> GetAllInterviewLevels()
@@ -111,7 +118,7 @@ namespace JobAPI.Controllers
         }
 
 
-        [HttpGet("{id}/GetInterviewLevelById")]
+        [HttpGet("GetInterviewLevelById/{id}")]
 
         
 

@@ -19,7 +19,9 @@ namespace CandidateAPI.DataLayer
         {
         
 
-            return db.Candidates.ToList();
+            return db.Candidates.Include(t => t.Job)
+                            .Include(t => t.Level)
+                            .ToList();
         }
 
         public int AddCandidate(Candidate a)
@@ -56,13 +58,16 @@ namespace CandidateAPI.DataLayer
 
         public List<CandidateAvailability> GetAllCandidateAvailabilities()
         {
-            return db.CandidateAvailabilities.ToList();
+            return db.CandidateAvailabilities.Include(t => t.Candidate)
+                            
+                                             .ToList();
         }
 
 
 
         public int AddCandidateAvailability(CandidateAvailability a)
         {
+            
             db.CandidateAvailabilities.Add(a);
             return db.SaveChanges();
         }

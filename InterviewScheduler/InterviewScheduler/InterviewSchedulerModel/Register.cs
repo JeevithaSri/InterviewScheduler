@@ -23,6 +23,10 @@ namespace CandidateAPI.InterviewSchedulerModel
         [DataType(DataType.Text)]
         [Required(ErrorMessage = "Please enter Username"), MaxLength(50)]
 
+        
+
+        [RegularExpression(@"^(?![\W_]+$)(?!\d+$)[a-zA-Z0-9 .&',_-]+$", ErrorMessage = "Username should be alphanumeric")]
+
         [Remote("IsUserNameExist", "Login",
                 ErrorMessage = "Username name already exists")]
 
@@ -39,7 +43,7 @@ namespace CandidateAPI.InterviewSchedulerModel
 
         [Required(ErrorMessage = "Please confirm password")]
 
-        [Compare("Password")]
+        [Compare("Password", ErrorMessage = "Password and Confirm Password did not match")]
 
         public string ConfirmPassword { get; set; }
 

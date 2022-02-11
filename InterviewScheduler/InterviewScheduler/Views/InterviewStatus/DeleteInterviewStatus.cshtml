@@ -1,0 +1,55 @@
+﻿@model CandidateAPI.InterviewSchedulerModel.InterviewStatus
+
+@{
+    ViewData["Title"] = "DeleteInterviewStatus";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/Delete.css" />
+
+</head>
+
+
+<body>
+    <div>
+        <center>
+            <h2 class="text-center" style="display: inline-block; margin-left: auto; font-family: 'Comic Sans MS'">Are you sure you want to delete this record?</h2>
+            <div class="col-md-6 text-center" style="opacity: 1;">
+                <div class="content-box">
+                    <center>
+                        <h5 class="text-center" style="text-decoration: underline; display: inline-block; margin-left: auto; font-family: 'Comic Sans MS'">Interview Status</h5>
+                        <br />
+                        <br />
+                        <table>
+                            <tr>
+                                <th>
+                                    <h5>
+                                        @Html.DisplayNameFor(model => model.ScheduleId)
+                                    </h5>
+                                    <h5>
+                                        @Html.DisplayNameFor(model => model.Status)
+                                    </h5>
+                                </th>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>
+                                    <h5>
+                                        @Html.DisplayFor(model => model.Status)
+                                    </h5>
+                                    <h5>
+                                        @Html.DisplayFor(model => model.ScheduleId)
+                                    </h5>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <br />
+                        <form asp-action="DeleteInterviewStatus">
+                            <input type="hidden" asp-for="Id" />
+                            <button class="noselect"><span class='text'>Delete</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z" /></svg></span></button>
+                        </form>
+                    </center>
+                </div>
+            </div>
+        </center>
+    </div>
+</body>

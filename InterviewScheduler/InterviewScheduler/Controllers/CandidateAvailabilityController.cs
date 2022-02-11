@@ -1,5 +1,6 @@
 ﻿using CandidateAPI.InterviewSchedulerModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,43 +9,44 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using X.PagedList;
+using X.PagedList.Mvc.Core;
 
 namespace InterviewScheduler.Controllers
 {
     public class CandidateAvailabilityController : Controller
     {
-        string Baseurl = "https://localhost:44308/";
+        
 
-        public async Task<ActionResult> ViewCandidateAvailability(CandidateAvailability d)
+        public async Task<ActionResult> ViewCandidateAvailability(CandidateAvailability d, int? page)
         {
-            List<CandidateAvailability> candidate = new List<CandidateAvailability>();
+            List<CandidateAvailability> candidateavailability = new List<CandidateAvailability>();
 
-            using (var client = new HttpClient())
+            HttpResponseMessage res = await Constant.Constant.GetCall(Constant.Constant.GetAllCandidateAvailabilitiesUrl );
+            if (res.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri(Baseurl);
-
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpResponseMessage Res = await client.GetAsync("api/Candidate/GetAllCandidateAvailabilities");
-
-                if (Res.IsSuccessStatusCode)
-                {
-                    var SubsResponse = Res.Content.ReadAsStringAsync().Result;
-
-                    candidate = JsonConvert.DeserializeObject<List<CandidateAvailability>>(SubsResponse);
-
-                }
-                return View(candidate);
+                var SubsResponse = res.Content.ReadAsStringAsync().Result;
+                candidateavailability = JsonConvert.DeserializeObject<List<CandidateAvailability>>(SubsResponse);
             }
+            return View(candidateavailability.ToPagedList(page ?? 1, 5));
         }
 
 
 
         [HttpGet]
-        public IActionResult AddCandidateAvailability()
+        public async Task<ActionResult> AddCandidateAvailability()
         {
 
+            List<SelectListItem> DropDownList = new List<SelectListItem>();
+            List<Candidate> SpecializationList = new List<Candidate>();
+            HttpResponseMessage response = await Constant.Constant.GetCall(Constant.Constant.GetAllCandidatesUrl );
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            SpecializationList = JsonConvert.DeserializeObject<List<Candidate>>(apiResponse);
+            foreach (var item in SpecializationList)
+            {
+                DropDownList.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+            ViewBag.specializationCandidate = DropDownList;
 
             return View();
         }
@@ -52,16 +54,12 @@ namespace InterviewScheduler.Controllers
         [HttpPost]
         public async Task<ActionResult> AddCandidateAvailability(CandidateAvailability d)
         {
-            CandidateAvailability candidate = new CandidateAvailability();
-            using (var httpClient = new HttpClient())
+            CandidateAvailability candidateavailability = new CandidateAvailability();
+            StringContent content = new StringContent(JsonConvert.SerializeObject(d), Encoding.UTF8, "application/json");
+            HttpResponseMessage res = await Constant.Constant.PostCall(Constant.Constant.AddCandidateAvailabilityUrl , content);
+            if (res.IsSuccessStatusCode)
             {
-                StringContent content = new StringContent(JsonConvert.SerializeObject(d), Encoding.UTF8, "application/json");
-
-                using (var response = await httpClient.PostAsync("https://localhost:44340/api/Candidate/AddCandidateAvailability", content))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    candidate = JsonConvert.DeserializeObject<CandidateAvailability>(apiResponse);
-                }
+                string apiResponse = await res.Content.ReadAsStringAsync();
             }
             return RedirectToAction("ViewCandidateAvailability");
         }
@@ -69,36 +67,26 @@ namespace InterviewScheduler.Controllers
         [HttpGet]
         public async Task<ActionResult> UpdateCandidateAvailability(int id)
         {
-            CandidateAvailability candidate = new CandidateAvailability();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("https://localhost:44340/api/Candidate/UpdateCandidateAvailability" + id))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    candidate = JsonConvert.DeserializeObject<CandidateAvailability>(apiResponse);
-                }
-            }
-            return View(candidate);
+            CandidateAvailability candidateavailability = new CandidateAvailability();
+            HttpResponseMessage response = await Constant.Constant.GetCall(Constant.Constant.UpdateCandidateAvailabilityViewUrl + id);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            candidateavailability = JsonConvert.DeserializeObject<CandidateAvailability>(apiResponse);
+            return View(candidateavailability);
         }
 
         [HttpPost]
         public async Task<ActionResult> UpdateCandidateAvailability(CandidateAvailability c)
         {
-            CandidateAvailability candidate = new CandidateAvailability();
+            //CandidateAvailability candidate = new CandidateAvailability();
 
-            using (var httpClient = new HttpClient())
-            {
-                #region
-                #endregion
-                int id = c.Id;
-                StringContent content1 = new StringContent(JsonConvert.SerializeObject(c), Encoding.UTF8, "application/json");
-                using (var response = await httpClient.PutAsync("https://localhost:44340/api/Candidate/UpdateCandidateAvailability?id=" + id, content1))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    ViewBag.Result = "Success";
+            int id = c.Id;
 
-                }
-            }
+            StringContent content = new StringContent(JsonConvert.SerializeObject(c), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await Constant.Constant.PutCall(Constant.Constant.UpdateCandidateAvailabilityUrl + id, content);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            ViewBag.Result = "Success";
+
             return RedirectToAction("ViewCandidateAvailability");
         }
 
@@ -106,16 +94,11 @@ namespace InterviewScheduler.Controllers
         public async Task<ActionResult> DeleteCandidateAvailability(int id)
         {
             TempData["id"] = id;
-            CandidateAvailability d = new CandidateAvailability();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("https://localhost:44340/api/Candidate/DeleteCandidateAvailability" + id))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    d = JsonConvert.DeserializeObject<CandidateAvailability>(apiResponse);
-                }
-            }
-            return View(d);
+            CandidateAvailability candidateAvailability = new CandidateAvailability();
+            HttpResponseMessage response = await Constant.Constant.GetCall(Constant.Constant.DeleteCandidateAvailabilityViewUrl  + id);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            candidateAvailability = JsonConvert.DeserializeObject<CandidateAvailability>(apiResponse);
+            return View(candidateAvailability);
         }
 
 
@@ -123,13 +106,9 @@ namespace InterviewScheduler.Controllers
         public async Task<ActionResult> DeleteCandidateAvailability(CandidateAvailability d)
         {
             int id = Convert.ToInt32(TempData["id"]);
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.DeleteAsync("https://localhost:44340/api/Candidate/DeleteCandidateAvailability?id=" + id))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                }
-            }
+            HttpResponseMessage response = await Constant.Constant.DeleteCall(Constant.Constant.DeleteCandidateAvailabilityUrl  + id);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            ViewBag.Result = "Success";
 
             return RedirectToAction("ViewCandidateAvailability");
         }

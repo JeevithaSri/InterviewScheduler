@@ -15,7 +15,18 @@ namespace CandidateAPI.DataLayer
         
         public List<Job> GetAllJobs()
         {
-            return db.Jobs.ToList();
+           
+            Job isDeleted = (from i in db.Jobs
+                             where i.RecStatus == "A"
+                             select i).FirstOrDefault();
+
+            if (isDeleted != null)
+            {
+                return db.Jobs.ToList();
+
+            }
+            return null;
+
         }
 
         public int AddJob(Job a)
@@ -35,9 +46,12 @@ namespace CandidateAPI.DataLayer
         }
         public int DeleteJob(int id)
         {
-            Job b = GetJobById(id);
-            db.Jobs.Remove(b);
-            return db.SaveChanges();
+            
+                Job job = GetJobById(id);
+                db.Jobs.Remove(job);
+                return db.SaveChanges();
+            
+           
         }
 
         [CustomExceptionFilter.CustomExceptionFilter]
@@ -48,6 +62,12 @@ namespace CandidateAPI.DataLayer
             return c;
         }
 
+        public Job GetJobIdByID(string Jobid)
+        {
+            Job item = db.Jobs.FirstOrDefault(usr => usr.JobId == Jobid);
+
+            return item;
+        }
 
 
         public List<InterviewLevel> GetAllInterviewLevels()

@@ -52,7 +52,7 @@ namespace CandidateAPI.Controllers
             return db.DeleteCandidate(id);
         }
 
-        [HttpGet("GetCandidateById")]
+        [HttpGet("GetCandidateById/{id}")]
 
         public Candidate GetCandidateById(int id)
         {

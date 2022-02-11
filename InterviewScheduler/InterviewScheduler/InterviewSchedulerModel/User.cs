@@ -20,11 +20,15 @@ namespace CandidateAPI.InterviewSchedulerModel
         [DataType(DataType.Text)]
         [Required(ErrorMessage = "Please enter Username"), MaxLength(50)]
 
-      
+        [Remote("UserNameDoesntExist", "Login",
+                ErrorMessage = "Username name doesn't exist")]
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Please enter Password")]
         [DataType(DataType.Password, ErrorMessage = "Enter Correct Password")]
+
+        [Remote("CheckPassword", "Login",
+                ErrorMessage = "Password is wrong")]
         public string Password { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }

@@ -1,5 +1,6 @@
 ﻿using CandidateAPI.InterviewSchedulerModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,43 +9,43 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using X.PagedList;
+using X.PagedList.Mvc.Core;
+
 
 namespace InterviewScheduler.Controllers
 {
     public class PanelAvailabilityController : Controller
     {
-        string Baseurl = "https://localhost:44308/";
 
-        public async Task<ActionResult> ViewPanelAvailability(PanelAvailability d)
+        public async Task<ActionResult> ViewPanelAvailability(PanelAvailability d, int? page)
         {
             List<PanelAvailability> panelavailability = new List<PanelAvailability>();
 
-            using (var client = new HttpClient())
+            HttpResponseMessage res = await Constant.Constant.GetCall(Constant.Constant.GetAllPanelAvailabilitiesUrl );
+            if (res.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri(Baseurl);
-
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpResponseMessage Res = await client.GetAsync("api/Panel/GetAllPanelAvailabilities");
-
-                if (Res.IsSuccessStatusCode)
-                {
-                    var SubsResponse = Res.Content.ReadAsStringAsync().Result;
-
-                    panelavailability = JsonConvert.DeserializeObject<List<PanelAvailability>>(SubsResponse);
-
-                }
-                return View(panelavailability);
+                var SubsResponse = res.Content.ReadAsStringAsync().Result;
+                panelavailability = JsonConvert.DeserializeObject<List<PanelAvailability>>(SubsResponse);
             }
+            return View(panelavailability.ToPagedList(page ?? 1, 5));
         }
 
 
 
         [HttpGet]
-        public IActionResult AddPanelAvailability()
+        public async Task<ActionResult> AddPanelAvailability()
         {
-
+            List<SelectListItem> DropDownList = new List<SelectListItem>();
+            List<Panel> SpecializationList = new List<Panel>();
+            HttpResponseMessage response = await Constant.Constant.GetCall(Constant.Constant.GetAllPanelsUrl );
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            SpecializationList = JsonConvert.DeserializeObject<List<Panel>>(apiResponse);
+            foreach (var item in SpecializationList)
+            {
+                DropDownList.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+            }
+            ViewBag.specializationPanel = DropDownList;
 
             return View();
         }
@@ -53,15 +54,11 @@ namespace InterviewScheduler.Controllers
         public async Task<ActionResult> AddPanelAvailability(PanelAvailability d)
         {
             PanelAvailability panelavailability = new PanelAvailability();
-            using (var httpClient = new HttpClient())
+            StringContent content = new StringContent(JsonConvert.SerializeObject(d), Encoding.UTF8, "application/json");
+            HttpResponseMessage res = await Constant.Constant.PostCall(Constant.Constant.AddPanelAvailabilityUrl , content);
+            if (res.IsSuccessStatusCode)
             {
-                StringContent content = new StringContent(JsonConvert.SerializeObject(d), Encoding.UTF8, "application/json");
-
-                using (var response = await httpClient.PostAsync("https://localhost:44340/api/Panel/AddPanelAvailability", content))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    panelavailability = JsonConvert.DeserializeObject<PanelAvailability>(apiResponse);
-                }
+                string apiResponse = await res.Content.ReadAsStringAsync();
             }
             return RedirectToAction("ViewPanelAvailability");
         }
@@ -70,14 +67,9 @@ namespace InterviewScheduler.Controllers
         public async Task<ActionResult> UpdatePanelAvailability(int id)
         {
             PanelAvailability panelavailability = new PanelAvailability();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("https://localhost:44340/api/Panel/UpdatePanelAvailability" + id))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    panelavailability = JsonConvert.DeserializeObject<PanelAvailability>(apiResponse);
-                }
-            }
+            HttpResponseMessage response = await Constant.Constant.GetCall(Constant.Constant.UpdatePanelAvailabilityViewUrl  + id);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            panelavailability = JsonConvert.DeserializeObject<PanelAvailability>(apiResponse);
             return View(panelavailability);
         }
 
@@ -86,19 +78,14 @@ namespace InterviewScheduler.Controllers
         {
             PanelAvailability candidate = new PanelAvailability();
 
-            using (var httpClient = new HttpClient())
-            {
-                #region
-                #endregion
-                int id = p.Id;
-                StringContent content1 = new StringContent(JsonConvert.SerializeObject(p), Encoding.UTF8, "application/json");
-                using (var response = await httpClient.PutAsync("https://localhost:44340/api/Panel/UpdatePanelAvailability?id=" + id, content1))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    ViewBag.Result = "Success";
+            int id = p.Id;
 
-                }
-            }
+            StringContent content = new StringContent(JsonConvert.SerializeObject(p), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await Constant.Constant.PutCall(Constant.Constant.UpdatePanelAvailabilityUrl  + id, content);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            ViewBag.Result = "Success";
+
             return RedirectToAction("ViewPanelAvailability");
         }
 
@@ -106,16 +93,11 @@ namespace InterviewScheduler.Controllers
         public async Task<ActionResult> DeletePanelAvailability(int id)
         {
             TempData["id"] = id;
-            PanelAvailability d = new PanelAvailability();
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("https://localhost:44340/api/Panel/DeletePanelAvailability" + id))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    d = JsonConvert.DeserializeObject<PanelAvailability>(apiResponse);
-                }
-            }
-            return View(d);
+            PanelAvailability panelAvailability = new PanelAvailability();
+            HttpResponseMessage response = await Constant.Constant.GetCall(Constant.Constant.DeletePanelAvailabilityViewUrl  + id);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            panelAvailability = JsonConvert.DeserializeObject<PanelAvailability>(apiResponse);
+            return View(panelAvailability);
         }
 
 
@@ -123,13 +105,10 @@ namespace InterviewScheduler.Controllers
         public async Task<ActionResult> DeletePanelAvailability(PanelAvailability d)
         {
             int id = Convert.ToInt32(TempData["id"]);
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.DeleteAsync("https://localhost:44340/api/Panel/DeletePanelAvailability?id=" + id))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                }
-            }
+            HttpResponseMessage response = await Constant.Constant.DeleteCall(Constant.Constant.DeletePanelAvailabilityUrl  + id);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            ViewBag.Result = "Success";
+
 
             return RedirectToAction("ViewPanelAvailability");
         }

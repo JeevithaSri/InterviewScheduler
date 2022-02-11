@@ -63,6 +63,13 @@ namespace CandidateAPI.DataLayer
             return item;
         }
 
+        public User GetPasswordByID(string Password)
+        {
+            User item = db.Users.FirstOrDefault(usr => usr.Password == Password);
+
+            return item;
+        }
+
         public List<Role> GetAllRoles()
         {
             return db.Roles.ToList();

@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - InterviewScheduler</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    @*<link href=@Url.Content("~/Assets/ViewStylesheet.css") rel="stylesheet" type="text/css">*@
+
+    @*@RenderSection("Styles", false)*@
+
+
+<style>
+        body
+
+
+        {
+            background: linear-gradient(70deg, #e6e6e6, #f7f7f7);
+            color: #514B64;
+
+        }
+
+        code {
+            background: #fff;
+            padding: 0.2rem;
+            border-radius: 0.2rem;
+            margin: 0 0.3rem;
+        }
+
+    /** {
+        box-sizing: border-box
+    }
+
+   
+    .tab {
+        float: left;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+        width: 30%;
+        height: 300px;
+    }*/
+
+        /* Style the buttons that are used to open the tab content */
+        /*.tab button {
+            display: block;
+            background-color: inherit;
+            color: black;
+            padding: 22px 16px;
+            width: 100%;
+            border: none;
+            outline: none;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.3s;
+        }*/
+
+            /* Change background color of buttons on hover */
+            /*.tab button:hover {
+                background-color: #ddd;
+            }*/
+
+            /* Create an active/current "tab button" class */
+            /*.tab button.active {
+                background-color: #ccc;
+            }*/
+
+    /* Style the tab content */
+    /*.tabcontent {
+        float: left;
+        padding: 0px 12px;
+        border: 1px solid #ccc;
+        width: 70%;
+        border-left: none;
+        height: 300px;
+    }*/
+
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: white;
+        color: black;
+       
+    }
+    
+
+</style>
+
+    @*<asp:SiteMapPath ID="SiteMapPath1" runat="server"></asp:SiteMapPath>*@
+</head>
+<body>
+    <header>
+
+        @using Microsoft.AspNetCore.Http
+        @using System.Linq
+        @inject IHttpContextAccessor HttpContextAccessor
+
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <img src="https://w7.pngwing.com/pngs/139/151/png-transparent-computer-icons-calendar-agenda-calendar-icon-miscellaneous-blue-text.png" style="width:50px; height:50px;" />
+                <a class="navbar-brand" asp-area="" asp-controller="HrDashboard" asp-action="Index" style="color:black;"><strong>INTERVIEW SCHEDULER</strong></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                @{ ViewBag.username = @HttpContextAccessor.HttpContext.Session.GetString("username");
+                }
+
+                <div id="navbarSupportedContent" class="collapse navbar-collapse">
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item"><a class="nav-link" asp-controller="Login" asp-action="NavUsername" asp-route-id="@ViewBag.Id"> @ViewBag.username</a></li>
+
+                    </ul>
+                </div>
+
+                <div id="navbarSupportedContent" class="collapse navbar-collapse">
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item"><a class="nav-link" asp-controller="Login" asp-action="NavUsername" asp-route-id="@ViewBag.Id"> @ViewBag.username</a></li>
+
+                    </ul>
+                </div>
+                <div id="navbarSupportedContent" class="collapse navbar-collapse">
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item"><a class="nav-link" asp-controller="Login" asp-action="NavUsername" asp-route-id="@ViewBag.Id"> @ViewBag.username</a></li>
+
+                    </ul>
+                </div>
+                <div id="navbarSupportedContent" class="collapse navbar-collapse">
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item"><a class="nav-link" asp-controller="Login" asp-action="NavUsername" asp-route-id="@ViewBag.Id"> @ViewBag.username</a></li>
+
+                    </ul>
+                </div>
+                <div id="navbarSupportedContent" class="collapse navbar-collapse">
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item"><a class="nav-link" asp-controller="Login" asp-action="NavUsername" asp-route-id="@ViewBag.Id"> @ViewBag.username</a></li>
+
+                    </ul>
+                </div>
+                <div id="navbarSupportedContent" class="collapse navbar-collapse">
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item"><a class="nav-link" asp-controller="Login" asp-action="NavUsername" asp-route-id="@ViewBag.Id"> @ViewBag.username</a></li>
+
+                    </ul>
+                </div>
+                <div id="navbarSupportedContent" class="collapse navbar-collapse">
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item"><a class="nav-link" asp-controller="Login" asp-action="NavUsername" asp-route-id="@ViewBag.Id"> @ViewBag.username</a></li>
+
+                    </ul>
+                </div>
+
+                <a class="navbar-brand" asp-area="" asp-controller="" asp-action="" onclick="return confirm('Are you sure you want to logout??')" style="margin-left: 30%; padding: 12px; margin: 0 10px; justify-content: space-between; background: none; color: black;">Logout</a>
+
+
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    @*<ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </li>
+            </ul>*@
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+
+            @*@Html.MvcSiteMap().SiteMapPath()*@
+
+            @RenderBody()
+
+            @*<div class="tab">
+                <button class="tablinks" onclick="openCity(event, 'London')" id="defaultOpen">London</button>
+                <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
+                <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
+            </div>
+
+            <div id="London" class="tabcontent">
+                <h3>London</h3>
+                <p>London is the capital city of England.</p>
+            </div>
+
+            <div id="Paris" class="tabcontent">
+                <h3>Paris</h3>
+                <p>Paris is the capital of France.</p>
+            </div>
+
+            <div id="Tokyo" class="tabcontent">
+                <h3>Tokyo</h3>
+                <p>Tokyo is the capital of Japan.</p>
+            </div>*@
+
+
+        </main>
+    </div>
+
+    @*<footer class="border-top footer text-muted">
+        <div class="container">
+            &copy;   InterviewScheduler   <a asp-area="" asp-controller="" asp-action=""></a>
+        </div>
+    </footer>*@
+
+<footer class="footer">
+    &nbsp;   &nbsp; &nbsp; &nbsp;  &copy;   InterviewScheduler   <a asp-area="" asp-controller="" asp-action=""></a>
+
+</footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

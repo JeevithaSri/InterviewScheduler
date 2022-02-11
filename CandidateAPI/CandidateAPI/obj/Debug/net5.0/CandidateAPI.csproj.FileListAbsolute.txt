@@ -61,3 +61,5 @@ D:\Legacy\CandidateAPI\CandidateAPI\obj\Debug\net5.0\CandidateAPI.genruntimeconf
 D:\Legacy\CandidateAPI\CandidateAPI\bin\Debug\net5.0\System.Net.Http.Formatting.dll
 D:\Legacy\CandidateAPI\CandidateAPI\bin\Debug\net5.0\System.Web.Http.dll
 D:\Legacy\CandidateAPI\CandidateAPI\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll
+D:\Legacy\CandidateAPI\CandidateAPI\bin\Debug\net5.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\Legacy\CandidateAPI\CandidateAPI\bin\Debug\net5.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll

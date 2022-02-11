@@ -159,7 +159,6 @@ D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\Lev
 D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\Panel\AddPanel.cshtml.g.cs
 D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\Panel\UpdatePanel.cshtml.g.cs
 D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\Panel\DeletePanel.cshtml.g.cs
-D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\HrDashboard\Index.cshtml.g.cs
 D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\RecruitorDashboard\Index.cshtml.g.cs
 D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\Panel\ViewPanel.cshtml.g.cs
 D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\Candidate\AddCandidate.cshtml.g.cs
@@ -178,3 +177,17 @@ D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\Sch
 D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\Schedule\ViewSchedule.cshtml.g.cs
 D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\Schedule\UpdateSchedule.cshtml.g.cs
 D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\Schedule\DeleteSchedule.cshtml.g.cs
+D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\InterviewStatus\AddInterviewStatus.cshtml.g.cs
+D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\InterviewStatus\UpdateInterviewStatus.cshtml.g.cs
+D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\InterviewStatus\ViewInterviewStatus.cshtml.g.cs
+D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\InterviewStatus\DeleteInterviewStatus.cshtml.g.cs
+D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\InterviewScheduler.MvcApplicationPartsAssemblyInfo.cs
+D:\Legacy\InterviewScheduler\InterviewScheduler\bin\Debug\net5.0\PagedList.Core.dll
+D:\Legacy\InterviewScheduler\InterviewScheduler\bin\Debug\net5.0\JetBrains.Annotations.dll
+D:\Legacy\InterviewScheduler\InterviewScheduler\bin\Debug\net5.0\X.PagedList.dll
+D:\Legacy\InterviewScheduler\InterviewScheduler\bin\Debug\net5.0\X.PagedList.Mvc.Core.dll
+D:\Legacy\InterviewScheduler\InterviewScheduler\bin\Debug\net5.0\AspNetSeo.dll
+D:\Legacy\InterviewScheduler\InterviewScheduler\bin\Debug\net5.0\AspNetSeo.CoreMvc.dll
+D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\HrDashboard\Index1.cshtml.g.cs
+D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\Shared\_Layout1.cshtml.g.cs
+D:\Legacy\InterviewScheduler\InterviewScheduler\obj\Debug\net5.0\Razor\Views\HrDashboard\Index.cshtml.g.cs

@@ -65,6 +65,27 @@ namespace UsersAPI.Controllers
             return Ok(user);
         }
 
+        [HttpGet("Password/{Password}")]
+        public IActionResult GetPassword(string Password)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = db.GetPasswordByID(Password);
+
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+
+            return Ok(user);
+        }
+
         [HttpPut("UpdateUser")]
 
         public int UpdateUser(int id, User c)

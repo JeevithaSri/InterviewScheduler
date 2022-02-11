@@ -85,6 +85,14 @@ namespace CandidateAPI.InterviewSchedulerModel
                     .HasMaxLength(15)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Resume)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.HasOne(d => d.Job)
                     .WithMany(p => p.Candidates)
                     .HasForeignKey(d => d.JobId)
@@ -113,11 +121,6 @@ namespace CandidateAPI.InterviewSchedulerModel
                     .HasDefaultValueSql("(sysdatetime())");
 
                 entity.Property(e => e.ModifiedAt).HasColumnName("modified_at");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Candidate)
                     .WithMany(p => p.CandidateAvailabilities)
@@ -183,12 +186,21 @@ namespace CandidateAPI.InterviewSchedulerModel
                     .HasColumnName("created_at")
                     .HasDefaultValueSql("(sysdatetime())");
 
+                entity.Property(e => e.JobId)
+                    .HasMaxLength(5)
+                    .IsUnicode(false)
+                    .HasColumnName("JOB_ID");
+
                 entity.Property(e => e.JobRole)
                     .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
                 entity.Property(e => e.ModifiedAt).HasColumnName("modified_at");
+
+                entity.Property(e => e.RecStatus)
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Panel>(entity =>
@@ -206,14 +218,6 @@ namespace CandidateAPI.InterviewSchedulerModel
                     .HasMaxLength(30)
                     .IsUnicode(false);
 
-                entity.Property(e => e.JobRole)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Level)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Mobileno)
                     .IsRequired()
                     .HasMaxLength(12)
@@ -225,6 +229,16 @@ namespace CandidateAPI.InterviewSchedulerModel
                     .IsRequired()
                     .HasMaxLength(30)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Job)
+                    .WithMany(p => p.Panels)
+                    .HasForeignKey(d => d.JobId)
+                    .HasConstraintName("FK__Panel__JobId__01142BA1");
+
+                entity.HasOne(d => d.Level)
+                    .WithMany(p => p.Panels)
+                    .HasForeignKey(d => d.LevelId)
+                    .HasConstraintName("FK__Panel__LevelId__03F0984C");
             });
 
             modelBuilder.Entity<PanelAvailability>(entity =>
@@ -240,11 +254,6 @@ namespace CandidateAPI.InterviewSchedulerModel
                     .HasDefaultValueSql("(sysdatetime())");
 
                 entity.Property(e => e.ModifiedAt).HasColumnName("modified_at");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.PanelId).HasColumnName("Panel_id");
 
@@ -289,6 +298,10 @@ namespace CandidateAPI.InterviewSchedulerModel
 
                 entity.Property(e => e.ModifiedAt).HasColumnName("modified_at");
 
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.PanelId).HasColumnName("Panel_id");
 
                 entity.HasOne(d => d.Candidate)
@@ -296,6 +309,11 @@ namespace CandidateAPI.InterviewSchedulerModel
                     .HasForeignKey(d => d.CandidateId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("CFK1");
+
+                entity.HasOne(d => d.Job)
+                    .WithMany(p => p.Schedules)
+                    .HasForeignKey(d => d.JobId)
+                    .HasConstraintName("FK__Schedule__JobId__14270015");
 
                 entity.HasOne(d => d.Level)
                     .WithMany(p => p.Schedules)
@@ -382,6 +400,22 @@ namespace CandidateAPI.InterviewSchedulerModel
             OnModelCreatingPartial(modelBuilder);
         }
 
+
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+
+        public override int SaveChanges()
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                var entity = entry.Entity;
+                if (entry.State == EntityState.Deleted)
+                {
+                    entry.State = EntityState.Modified;
+                    entity.GetType().GetProperty("RecStatus").SetValue(entity, "D");
+                }
+            }
+            return base.SaveChanges();
+        }
     }
 }

@@ -15,7 +15,9 @@ namespace CandidateAPI.DataLayer
 
         public List<Panel> GetAllPanels()
         {
-            return db.Panels.ToList();
+            return db.Panels.Include(t => t.Job)
+                            .Include(t => t.Level)
+                            .ToList();
         }
 
         public int AddPanel(Panel a)
@@ -50,7 +52,9 @@ namespace CandidateAPI.DataLayer
 
         public List<PanelAvailability> GetAllPanelAvailabilities()
         {
-            return db.PanelAvailabilities.ToList();
+            return db.PanelAvailabilities.Include(t => t.Panel)
+
+                                         .ToList();
         }
 
 

@@ -1,238 +1,113 @@
-﻿@model IEnumerable<CandidateAPI.InterviewSchedulerModel.PanelAvailability>
+﻿@model X.PagedList.IPagedList<CandidateAPI.InterviewSchedulerModel.PanelAvailability>
+
+@using X.PagedList.Mvc.Core;
+
 
 @{
     ViewData["Title"] = "ViewPanelAvailability";
 }
 
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        @@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
-        .get-in-touch {
-            max-width: 1000px;
-            margin: 50px auto;
-            position: relative;
-        }
-
-            .get-in-touch .title {
-                text-align: center;
-                text-transform: uppercase;
-                letter-spacing: 3px;
-                font-size: 3.2em;
-                line-height: 48px;
-                padding-bottom: 48px;
-                color: #5543ca;
-                background: #5543ca;
-                background: -moz-linear-gradient(left,#f4524d 0%,#5543ca 100%) !important;
-                background: -webkit-linear-gradient(left,#f4524d 0%,#5543ca 100%) !important;
-                background: linear-gradient(to right,#f4524d 0%,#5543ca 100%) !important;
-                -webkit-background-clip: text !important;
-                -webkit-text-fill-color: transparent !important;
-            }
-
-        .subscription {
-            font-family: Arial, Helvetica, sans-serif;
-            border-collapse: collapse;
-            width: 80%;
-            margin-left: 50px;
-            margin-right: 50px;
-            counter-reset: serial-number; /* Set the serial number counter to 0 */
-        }
-
-            .subscription td:first-child:before {
-                counter-increment: serial-number; /* Increment the serial number counter */
-                content: counter(serial-number); /* Display the counter */
-            }
-
-            .subscription td, .subscription th {
-                border: 1px solid #ddd;
-                padding: 8px;
-            }
-
-            .subscription tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
-
-            .subscription tr:hover {
-                background-color: #ddd;
-            }
-
-            .subscription th {
-                padding-top: 12px;
-                padding-bottom: 12px;
-                text-align: left;
-                background-color: #01054d;
-                color: white;
-            }
-
-        .wrapper {
-            display: inline-flex;
-        }
-
-            .wrapper .icon {
-                position: relative;
-                background-color: #ffffff;
-                border-radius: 50%;
-                border: 1px solid #adc4bf;
-                padding: 15px;
-                margin: 10px;
-                width: 50px;
-                height: 50px;
-                font-size: 18px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            }
-
-            .wrapper .tooltip {
-                position: absolute;
-                top: 0;
-                font-size: 14px;
-                background-color: #ffffff;
-                color: #ffffff;
-                padding: 5px 8px;
-                border-radius: 5px;
-                box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-                opacity: 0;
-                pointer-events: none;
-                transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            }
-
-                .wrapper .tooltip::before {
-                    position: absolute;
-                    content: "";
-                    height: 8px;
-                    width: 8px;
-                    background-color: #ffffff;
-                    bottom: -3px;
-                    left: 50%;
-                    transform: translate(-50%) rotate(45deg);
-                    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                }
-
-            .wrapper .icon:hover .tooltip {
-                top: -45px;
-                opacity: 1;
-                visibility: visible;
-                pointer-events: auto;
-            }
-
-            .wrapper .icon:hover span,
-            .wrapper .icon:hover .tooltip {
-                text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
-            }
-
-            .wrapper .edit:hover,
-            .wrapper .edit:hover .tooltip,
-            .wrapper .edit:hover .tooltip::before {
-                background-color: #3b5999;
-                color: #ffffff;
-            }
-
-            .wrapper .delete:hover,
-            .wrapper .delete:hover .tooltip,
-            .wrapper .delete:hover .tooltip::before {
-                background-color: #de463b;
-                color: #ffffff;
-            }
-    </style>
+    <link rel="stylesheet" href="~/css/View.css" />
 </head>
-<section class="get-in-touch">
-    <div class="justify-content-xl-center" align="center">
+<div class="justify-content-xl-center" align="center">
 
-        <h2 class="title">View Panel Availabilities</h2>
+    <h2 class="title">View Panel Availabilities</h2>
+    <br />
+
+    <table class="subscription">
+        <thead>
+            <tr>
+                <th>
+                    <label>Sl.No</label>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().PanelId)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.First().AvailableDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().AvailableTimeFrom)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().AvailableTimeTo)
+                </th>
 
 
-        <table class="subscription">
-            <thead>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
                 <tr>
-                    <th>
-                        <label>Sl.No</label>
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.PanelId)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AvailableDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AvailableTimeFrom)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AvailableTimeTo)
-                    </th>
+                    <td>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PanelId)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AvailableDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AvailableTimeFrom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AvailableTimeTo)
+                    </td>
 
 
-                    <th>Action</th>
+                    <td>
+                        <div class="wrapper">
+                            <div class="icon edit">
+                                <div class="tooltip">Update</div>
+                                <a asp-action="UpdatePanelAvailability" asp-route-id="@item.Id"><span><i class="fa fa-edit" style="color: black;"></i></span></a>
+                            </div>
+                        </div>
+                        <div class="wrapper">
+                            <div class="icon delete">
+                                <div class="tooltip">Delete</div>
+                                <a asp-action="DeletePanelAvailability" asp-route-id="@item.Id"><span><i class="fa fa-trash" style="color: black;"></i></span></a>
+                            </div>
+                        </div>
+
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PanelId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AvailableDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AvailableTimeFrom)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AvailableTimeTo)
-                        </td>
+            }
+        </tbody>
+    </table>
 
-
-                        <td>
-                            <div class="wrapper">
-                                <div class="icon edit">
-                                    <div class="tooltip">Update</div>
-                                    <a asp-action="UpdatePanelAvailability" asp-route-id="@item.Id"><span><i class="fa fa-edit" style="color: black;"></i></span></a>
-                                </div>
-                            </div>
-                            <div class="wrapper">
-                                <div class="icon delete">
-                                    <div class="tooltip">Delete</div>
-                                    <a asp-action="DeletePanelAvailability" asp-route-id="@item.Id"><span><i class="fa fa-trash" style="color: black;"></i></span></a>
-                                </div>
-                            </div>
-
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <br />
-        <br />
+    <br />
+    <br />
 
 
 
-        <div class="justify-content-xl-center">
-            <a class="btn btn-info" asp-action="AddPanelAvailability">Add Panel Availability</a>
-        </div>
-
-
-
-
-
-
+    <div class="justify-content-xl-center">
+        <a class="btn btn-info" asp-action="AddPanelAvailability">Add Panel Availability</a>
     </div>
-</section>
+
+    <br />
+
+
+    <center>
+        <div class="justify-content-xl-center">
+            <a asp-controller="HrDashboard" asp-action="Index" class="btn btn-outline-dark">Back</a>
+        </div>
+    </center>
+
+    <br />
+    @Html.PagedListPager(Model, page => Url.Action("ViewPanelAvailability", "PanelAvailability", new { page }))
+
+
+</div>
